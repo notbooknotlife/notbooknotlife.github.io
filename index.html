@@ -3,160 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZY | Workspace</title>
+    <title>ZY's Blog | 记事本</title>
     <style>
         :root {
-            --bg-color: #050505;
-            --text-main: #e0e0e0;
-            --text-dim: #888;
-            --accent-glow: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
+            --primary-color: #333;
+            --secondary-color: #666;
+            --bg-color: #f9f9f9;
+            --accent-color: #ff5722; /* 活泼的点缀色 */
+            --card-bg: #ffffff;
         }
 
         body {
             margin: 0;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: -apple-system, "Noto Sans SC", sans-serif;
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+
+        /* 顶部导航 */
+        nav {
+            padding: 20px 10%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        /* 背景微弱的渐变光晕 */
-        .glow {
-            position: absolute;
-            width: 100vw;
-            height: 100vh;
-            background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
-            z-index: -1;
-        }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); text-decoration: none; }
+        .nav-links a { margin-left: 25px; text-decoration: none; color: var(--secondary-color); font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--accent-color); }
 
-        .main-content {
+        /* 欢迎区域 */
+        .hero {
+            padding: 80px 10%;
             text-align: center;
-            max-width: 500px;
-            padding: 20px;
-            animation: fadeIn 1.2s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            letter-spacing: -1px;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .tagline {
-            color: var(--text-dim);
-            font-size: 0.95rem;
+            background: #fff;
             margin-bottom: 40px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
         }
 
-        .grid {
+        .hero h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .hero p { color: var(--secondary-color); font-size: 1.1rem; }
+
+        /* 文章网格 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        .item {
-            background: var(--accent-glow);
-            border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+        .post-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            cursor: pointer;
         }
 
-        .item:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.08);
+        .post-card:hover { transform: translateY(-5px); }
+
+        .post-img {
+            height: 180px;
+            background: #eee;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
         }
 
-        .item-title {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-bottom: 5px;
-            display: block;
-        }
+        .post-content { padding: 25px; }
+        .post-tag { color: var(--accent-color); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+        .post-title { font-size: 1.25rem; margin: 10px 0; display: block; }
+        .post-desc { color: var(--secondary-color); font-size: 0.9rem; margin-bottom: 15px; }
+        .post-date { font-size: 0.8rem; color: #bbb; }
 
-        .item-value {
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        .full-width {
-            grid-column: span 2;
-        }
-
-        .footer-links {
-            margin-top: 20px;
-        }
-
-        .footer-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 0.85rem;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: #fff;
-        }
-
-        /* 极简呼吸灯 */
-        .status {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background-color: #2ea043;
-            border-radius: 50%;
-            margin-right: 8px;
-            box-shadow: 0 0 8px #2ea043;
-        }
+        footer { text-align: center; padding: 40px; color: #bbb; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <div class="glow"></div>
-
-    <div class="main-content">
-        <h1>ZY.W</h1>
-        <p class="tagline">Explore · Build · Repeat</p>
-
-        <div class="grid">
-            <div class="item">
-                <span class="item-title">Location</span>
-                <span class="item-value">Nanjing, CN</span>
-            </div>
-            <div class="item">
-                <span class="item-title">Focus</span>
-                <span class="item-value">AI & Dev</span>
-            </div>
-            <div class="item full-width">
-                <span class="item-title">Local Node Status</span>
-                <span class="item-value"><span class="status"></span>4070 Ti Hyper-V Active</span>
-            </div>
-            <div class="item full-width">
-                <span class="item-title">Quote</span>
-                <span class="item-value">"Everything is code."</span>
-            </div>
+    <nav>
+        <a href="#" class="logo">ZY.</a>
+        <div class="nav-links">
+            <a href="#">首页</a>
+            <a href="#">归档</a>
+            <a href="#">关于</a>
         </div>
+    </nav>
 
-        <div class="footer-links">
-            <a href="https://github.com/notbooknotlife">GitHub</a>
-            <a href="mailto:your-email@example.com">Contact</a>
-        </div>
-    </div>
+    <header class="hero">
+        <h2>👋 欢迎来到我的记事本</h2>
+        <p>写代码，也写生活。这里记录了一些关于技术和日常的碎碎念。</p>
+    </header>
+
+    <main class="container">
+        <article class="post-card">
+            <div class="post-img">Image Placeholder</div>
+            <div class="post-content">
+                <span class="post-tag">随笔</span>
+                <strong class="post-title">2026 年，关于效率的一些思考</strong>
+                <p class="post-desc">在信息爆炸的时代，如何保持专注？</p>
+                <div class="post-date">2026.03.16</div>
+            </div>
+        </article>
+
+        <article class="post-card">
+            <div class="post-img" style="background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+            <div class="post-content">
+                <span class="post-tag">技术</span>
+                <strong class="post-title">Java 原生服务器的搭建</strong>
+                <p class="post-desc">脱离繁重的框架，理解 HTTP 通信</p>
+                <div class="post-date">2026.03.10</div>
+            </div>
+        </article>
+
+        <article class="post-card">
+            <div class="post-img" style="background-image: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+            <div class="post-content">
+                <span class="post-tag">数码</span>
+                <strong class="post-title">如何折腾一台服务器</strong>
+                <p class="post-desc">内网穿透</p>
+                <div class="post-date">2026.02.28</div>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        &copy; 2026 ZY. Built with Passion.
+    </footer>
 
 </body>
 </html>
