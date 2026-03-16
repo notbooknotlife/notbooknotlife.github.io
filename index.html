@@ -180,28 +180,37 @@
         </footer>
     </div>
 
-    <script>
-        const text = "./init_system.sh\n[OK] System loaded.\n[OK] Welcome to my personal space.";
-        const element = document.getElementById('typewriter');
-        let i = 0;
+<div id="output" style="color: #00FF00; font-family: monospace;">正在等待 4070 Ti 的响应...</div>
 
-        function typeWriter() {
-            if (i < text.length) {
-                // 处理换行符
-                if(text.charAt(i) === '\n') {
-                    element.innerHTML += '<br><span class="prompt">root@system:~#</span> ';
-                } else {
-                    element.innerHTML += text.charAt(i);
-                }
-                i++;
-                // 随机化打字速度，显得更真实
-                setTimeout(typeWriter, Math.random() * 50 + 30);
+<script>
+    // 1. 把这里替换成你刚刚在终端里获取到的、绿色的 trycloudflare 链接
+    // 注意：一定要加上我们写的路径 /api/status
+    const backendUrl = "https://你的随机词.trycloudflare.com/api/status";
+
+    // 2. 发起跨域请求，去你家电脑拿数据
+    fetch(backendUrl)
+        .then(response => {
+            // 检查服务器是不是真的成功返回了数据
+            if (!response.ok) {
+                throw new Error('网络响应不正常，可能是隧道断了');
             }
-        }
-
-        // 页面加载完成后启动打字机
-        window.onload = typeWriter;
-    </script>
+            // 把服务器传回来的数据当做 JSON 解析（完美避开之前的 '<' 报错）
+            return response.json(); 
+        })
+        .then(data => {
+            console.log("后台传来的完整数据：", data);
+            
+            // 3. 把拿到的 message 提取出来，喂给你的打字机特效
+            const textToType = data.message; 
+            
+            // 简单的直接显示（你可以换成你炫酷的打字机函数）
+            document.getElementById('output').innerText = textToType + " (时间: " + data.time + ")";
+        })
+        .catch(error => {
+            console.error("请求炸了:", error);
+            document.getElementById('output').innerText = "连接本地服务器失败，请检查你的家里的电脑和隧道是否运行正常。";
+        });
+</script>
 
 </body>
 </html>
