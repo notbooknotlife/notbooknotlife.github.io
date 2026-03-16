@@ -3,229 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>状态控制台</title>
+    <title>ZY | Workspace</title>
     <style>
-        /* --- 核心 CSS 样式 --- */
         :root {
-            --bg-color: #121212; /* 极致暗黑背景 */
-            --container-bg: rgba(255, 255, 255, 0.05); /* 半透明玻璃背景 */
-            --text-primary: #e0e0e0; /* 主文字颜色 */
-            --accent-color: #00ff88; /* 充满活力的荧光绿（象征算力） */
-            --border-color: rgba(255, 255, 255, 0.1);
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* 玻璃拟态阴影 */
-            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-            --font-mono: 'Fira Code', 'Cascadia Code', 'Source Code Pro', Monospace; /* 代码字体 */
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            --bg-color: #050505;
+            --text-main: #e0e0e0;
+            --text-dim: #888;
+            --accent-glow: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         body {
-            font-family: var(--font-family);
+            margin: 0;
             background-color: var(--bg-color);
-            color: var(--text-primary);
+            color: var(--text-main);
+            font-family: -apple-system, "Noto Sans SC", sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden; /* 防止滚动条破坏氛围 */
+            overflow: hidden;
         }
 
-        /* 背景微光动画 */
-        body::before {
-            content: '';
+        /* 背景微弱的渐变光晕 */
+        .glow {
             position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            filter: blur(150px);
-            opacity: 0.2;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
             z-index: -1;
-            animation: pulse 8s infinite alternate;
         }
 
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(50%, 50%) scale(1.2); }
-        }
-
-        .container {
-            background: var(--container-bg);
-            backdrop-filter: blur(10px); /* 核心：玻璃模糊效果 */
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            width: 90%;
-            max-width: 600px;
-            padding: 40px;
+        .main-content {
             text-align: center;
-            transition: transform 0.3s ease;
+            max-width: 500px;
+            padding: 20px;
+            animation: fadeIn 1.2s ease-out;
         }
 
-        .container:hover {
-            transform: translateY(-5px); /* 鼠标悬停微动 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #fff, var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent; /* 文字渐变效果 */
+            font-size: 2.2rem;
             letter-spacing: -1px;
+            margin-bottom: 8px;
+            font-weight: 700;
         }
 
-        .subtitle {
-            font-size: 1rem;
-            color: #888;
-            margin-bottom: 30px;
-            font-weight: 300;
-        }
-
-        .status-box {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-            min-height: 100px; /* 留出空间给打字机 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #ai-output {
-            font-family: var(--font-mono); /* 代码字体 */
-            font-size: 1.1rem;
-            color: var(--accent-color);
-            line-height: 1.6;
-            word-wrap: break-word;
-        }
-
-        /* 打字机光标效果 */
-        #ai-output::after {
-            content: '|';
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-
-        .btn {
-            background: transparent;
-            border: 2px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .tagline {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .btn:hover {
-            background: var(--accent-color);
-            color: #121212;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); /* 霓虹发光效果 */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 40px;
         }
 
-        .btn:active {
-            transform: scale(0.95);
+        .item {
+            background: var(--accent-glow);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
         }
 
-        .footer {
-            margin-top: 30px;
-            font-size: 0.8rem;
-            color: #555;
+        .item:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .item-title {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .item-value {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .footer-links {
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        /* 极简呼吸灯 */
+        .status {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #2ea043;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 8px #2ea043;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>计算中心</h1>
-        <p class="subtitle">实时算力节点状态控制台</p>
-        
-        <div class="status-box">
-            <div id="ai-output">正在等待初始化...</div>
+    <div class="glow"></div>
+
+    <div class="main-content">
+        <h1>ZY.W</h1>
+        <p class="tagline">Explore · Build · Repeat</p>
+
+        <div class="grid">
+            <div class="item">
+                <span class="item-title">Location</span>
+                <span class="item-value">Nanjing, CN</span>
+            </div>
+            <div class="item">
+                <span class="item-title">Focus</span>
+                <span class="item-value">AI & Dev</span>
+            </div>
+            <div class="item full-width">
+                <span class="item-title">Local Node Status</span>
+                <span class="item-value"><span class="status"></span>4070 Ti Hyper-V Active</span>
+            </div>
+            <div class="item full-width">
+                <span class="item-title">Quote</span>
+                <span class="item-value">"Everything is code."</span>
+            </div>
         </div>
 
-        <button class="btn" onclick="checkStatus()">检查节点状态</button>
-
-        <div class="footer">
-            由 Cloudflare Tunnel 安全连接到您的本地 Java 服务器
+        <div class="footer-links">
+            <a href="https://github.com/notbooknotlife">GitHub</a>
+            <a href="mailto:your-email@example.com">Contact</a>
         </div>
     </div>
 
-    <script>
-        // --- 核心 JS 逻辑（完美打通链路） ---
-
-        // 1. 【必须修改】把你最新的 trycloudflare 链接填在这里
-        // 注意：一定要加上我们写的路径 /api/status
-        const backendApiUrl = "https://pupils-shipping-assets-manufacturer.trycloudflare.com/api/status";
-
-        const outputEl = document.getElementById('ai-output');
-        let isTyping = false; // 防止重复点击
-
-        // 打字机特效函数
-        function typeWriter(text, i, fnCallback) {
-            if (i < text.length) {
-                outputEl.innerText = text.substring(0, i + 1);
-                setTimeout(function() {
-                    typeWriter(text, i + 1, fnCallback)
-                }, 50); // 打字速度，数字越小越快
-            } else if (typeof fnCallback == 'function') {
-                setTimeout(fnCallback, 700); // 打字完成后稍微停顿
-            }
-        }
-
-        // 核心：请求后端的函数
-        function checkStatus() {
-            if (isTyping) return; // 如果正在打字，不执行
-            isTyping = true;
-            
-            outputEl.innerText = ""; // 清空输出区
-            typeWriter("正在呼叫远端节点...", 0, function() {
-                
-                // 真正的网络请求开始
-                fetch(backendApiUrl)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('网络响应异常');
-                        }
-                        return response.json(); // 解析 Java 传回来的 JSON
-                    })
-                    .then(data => {
-                        console.log("成功拿到数据：", data);
-                        // 把拿到的 message 提取出来，喂给打字机
-                        const textToType = `来自算力中心的回应: ${data.message} (计算时间: ${data.time})`;
-                        
-                        outputEl.innerText = ""; // 再次清空，准备打字最终结果
-                        typeWriter(textToType, 0, function() {
-                            isTyping = false; // 允许再次点击
-                        });
-                    })
-                    .catch(error => {
-                        console.error("请求失败:", error);
-                        outputEl.innerText = ""; 
-                        typeWriter(`❌ 无法连接到本地算力节点。请检查 Java 后端和隧道是否在线。 (错误: ${error.message})`, 0, function() {
-                            isTyping = false;
-                        });
-                    });
-            });
-        }
-
-        // 页面加载完成后自动检查一次
-        window.onload = checkStatus;
-    </script>
 </body>
 </html>
